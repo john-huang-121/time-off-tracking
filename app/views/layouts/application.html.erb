@@ -59,13 +59,12 @@
             <ul class="navbar-nav">
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                  <%# <i class="bi bi-person-circle"></i> <%= current_user.full_name %> %>
-                  <i class="bi bi-person-circle"></i> Josh
-                  <%# if current_user.role_admin? %>
-                    <%# <span class="badge bg-danger">Admin</span> %>
-                  <%# elsif current_user.role_manager? %>
-                    <%# <span class="badge bg-warning">Manager</span> %>
-                  <%# end %>
+                  <i class="bi bi-person-circle"></i> <%= current_user.full_name.presence || current_user.email %>
+                  <% if current_user.role_admin? %>
+                    <span class="badge bg-danger">Admin</span>
+                  <% elsif current_user.role_manager? %>
+                    <span class="badge bg-warning">Manager</span>
+                  <% end %>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
                   <li>

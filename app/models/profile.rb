@@ -8,6 +8,10 @@ class Profile < ApplicationRecord
   validate :manager_cannot_be_self
   validate :manager_chain_cannot_cycle
 
+  def full_name
+    [ first_name, last_name ].compact.join(" ").strip
+  end
+
   private
 
   def manager_cannot_be_self
@@ -19,7 +23,7 @@ class Profile < ApplicationRecord
   def manager_chain_cannot_cycle
     return if manager.nil? || user.nil?
 
-    seen = Set.new([user_id])
+    seen = Set.new([ user_id ])
     cursor = manager
 
     while cursor
