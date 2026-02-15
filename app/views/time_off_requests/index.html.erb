@@ -69,7 +69,7 @@
                     <small class="text-muted"><%= request.user.department&.name %></small>
                   </td>
                 <% end %>
-                <td><%= request.time_off_type.name %></td>
+                <td><%= request.time_off_type.humanize %></td>
                 <td><%= request.start_date.strftime('%b %d, %Y') %></td>
                 <td><%= request.end_date.strftime('%b %d, %Y') %></td>
                 <td><span class="badge bg-secondary"><%= request.total_days %></span></td>

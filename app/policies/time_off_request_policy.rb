@@ -4,7 +4,7 @@ class TimeOffRequestPolicy < ApplicationPolicy
   end
 
   def show?
-    user.admin? || record.user == user || user.can_approve?(record)
+    user.role_admin? || record.user == user || user.can_approve?(record)
   end
 
   def create?
@@ -12,30 +12,30 @@ class TimeOffRequestPolicy < ApplicationPolicy
   end
 
   def update?
-    record.user == user && record.can_be_edited?
+    record.user == user && record.status_pending?
   end
 
   def destroy?
-    record.user == user && record.can_be_cancelled?
+    record.user == user && (record.status_pending? || record.status_approved?)
   end
 
   def approve?
-    user.can_approve?(record) && record.can_be_approved?
+    user.can_approve?(record) && record.status_pending?
   end
 
   def deny?
-    user.can_approve?(record) && record.can_be_denied?
+    user.can_approve?(record) && record.status_pending?
   end
 
   def cancel?
-    record.user == user && record.can_be_cancelled?
+    record.user == user && record.status_pending?
   end
 
   class Scope < ApplicationPolicy::Scope
     def resolve
-      if user.admin?
+      if user.role_admin?
         scope.all
-      elsif user.manager?
+      elsif user.role_manager?
         # Managers see their own requests + their direct reports' requests
         scope.where(user_id: user.id)
              .or(scope.joins(:user).where(users: { manager_id: user.id }))

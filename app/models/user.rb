@@ -21,6 +21,13 @@ class User < ApplicationRecord
   # Convenience
   delegate :full_name, :department, :manager, to: :profile, allow_nil: true
 
+  def can_approve?(time_off_request)
+    return true if role_admin?
+    return false unless role_manager?
+    return false if time_off_request.user_id == id
+    direct_report_profiles.exists?(user_id: time_off_request.user_id)
+  end
+
   def profile_complete?
     profile.present? &&
       profile.department_id.present? &&

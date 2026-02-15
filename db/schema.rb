@@ -20,8 +20,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_12_015158) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "time_off_request_id", null: false
-    t.bigint "approver_id", null: false
-    t.index ["approver_id"], name: "index_approvals_on_approver_id"
+    t.bigint "reviewer_id", null: false
+    t.index ["reviewer_id"], name: "index_approvals_on_reviewer_id"
     t.index ["time_off_request_id", "created_at"], name: "index_approvals_on_time_off_request_id_and_created_at"
     t.index ["time_off_request_id"], name: "index_approvals_on_time_off_request_id"
     t.check_constraint "decision = ANY (ARRAY[0, 1])", name: "chk_approvals_decision"
@@ -87,7 +87,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_12_015158) do
   end
 
   add_foreign_key "approvals", "time_off_requests"
-  add_foreign_key "approvals", "users", column: "approver_id"
+  add_foreign_key "approvals", "users", column: "reviewer_id"
   add_foreign_key "profiles", "departments"
   add_foreign_key "profiles", "users"
   add_foreign_key "profiles", "users", column: "manager_id"

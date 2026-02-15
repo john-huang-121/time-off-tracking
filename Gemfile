@@ -65,3 +65,10 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+# Authorization with policies
+gem "pundit", "~> 2.5"
+
+# Pagination
+gem "kaminari", "~> 1.2"
+gem "kaminari-bootstrap", "~> 3.0"

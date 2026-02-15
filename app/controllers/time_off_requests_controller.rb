@@ -1,17 +1,18 @@
 class TimeOffRequestsController < ApplicationController
-  before_action :set_time_off_request, only: [:show, :edit, :update, :destroy, :approve, :deny, :cancel]
-  before_action :authorize_request, only: [:show, :edit, :update, :destroy, :approve, :deny, :cancel]
+  before_action :set_time_off_request, only: %i[show edit update destroy approve deny cancel]
+  before_action :authorize_request,    only: %i[show edit update destroy approve deny cancel]
+  before_action :load_form_options,    only: %i[new create edit update]
 
   def index
-    @time_off_requests = policy_scope(TimeOffRequest).ordered.page(params[:page]).per(20)
-    
-    # Filter by status
-    @time_off_requests = @time_off_requests.where(status: params[:status]) if params[:status].present?
-    
-    # Filter by user for managers/admins
-    if params[:user_id].present? && (current_user.admin? || current_user.manager?)
-      @time_off_requests = @time_off_requests.where(user_id: params[:user_id])
+    scope = policy_scope(TimeOffRequest).ordered
+
+    scope = scope.where(status: params[:status]) if params[:status].present?
+
+    if params[:user_id].present? && (current_user.role_admin? || current_user.role_manager?)
+      scope = scope.where(user_id: params[:user_id])
     end
+
+    @time_off_requests = scope.page(params[:page]).per(20)
   end
 
   def show
@@ -20,7 +21,6 @@ class TimeOffRequestsController < ApplicationController
 
   def new
     @time_off_request = current_user.time_off_requests.build
-    @time_off_types = TimeOffType.active.ordered
     authorize @time_off_request
   end
 
@@ -29,69 +29,73 @@ class TimeOffRequestsController < ApplicationController
     authorize @time_off_request
 
     if @time_off_request.save
-      TimeOffRequestMailer.request_created(@time_off_request).deliver_later
-      redirect_to @time_off_request, notice: 'Time-off request was successfully created.'
+      redirect_to @time_off_request, notice: "Time-off request was successfully created."
     else
-      @time_off_types = TimeOffType.active.ordered
       render :new, status: :unprocessable_entity
     end
   end
 
   def edit
-    @time_off_types = TimeOffType.active.ordered
   end
 
   def update
     if @time_off_request.update(time_off_request_params)
-      redirect_to @time_off_request, notice: 'Time-off request was successfully updated.'
+      redirect_to @time_off_request, notice: "Time-off request was successfully updated."
     else
-      @time_off_types = TimeOffType.active.ordered
       render :edit, status: :unprocessable_entity
     end
   end
 
   def destroy
     @time_off_request.destroy
-    redirect_to time_off_requests_url, notice: 'Time-off request was successfully deleted.'
+    redirect_to time_off_requests_url, notice: "Time-off request was successfully deleted."
   end
 
   def approve
-    if @time_off_request.approve!(current_user, notes: params[:notes])
-      redirect_to @time_off_request, notice: 'Time-off request approved successfully.'
+    notes = params.dig(:approval, :notes) || params[:notes]
+    if @time_off_request.approve!(reviewer: current_user, notes: notes)
+      redirect_to @time_off_request, notice: "Time-off request approved successfully."
     else
-      redirect_to @time_off_request, alert: 'Unable to approve time-off request.'
+      redirect_to @time_off_request, alert: "Unable to approve time-off request."
     end
   end
 
   def deny
-    if @time_off_request.deny!(current_user, notes: params[:notes])
-      redirect_to @time_off_request, notice: 'Time-off request denied.'
+    notes = params.dig(:approval, :notes) || params[:notes]
+    if @time_off_request.deny!(reviewer: current_user, notes: notes)
+      redirect_to @time_off_request, notice: "Time-off request denied."
     else
-      redirect_to @time_off_request, alert: 'Unable to deny time-off request.'
+      redirect_to @time_off_request, alert: "Unable to deny time-off request."
     end
   end
 
   def cancel
-    if @time_off_request.cancel!
-      redirect_to @time_off_request, notice: 'Time-off request cancelled.'
+    notes = params.dig(:approval, :notes) || params[:notes]
+    if @time_off_request.cancel!(reviewer: current_user, notes: notes)
+      redirect_to @time_off_request, notice: "Time-off request cancelled."
     else
-      redirect_to @time_off_request, alert: 'Unable to cancel time-off request.'
+      redirect_to @time_off_request, alert: "Unable to cancel time-off request."
     end
   end
 
   private
 
   def set_time_off_request
-    @time_off_request = TimeOffRequest.find(params[:id])
+    # IMPORTANT: scope the find to what the user is allowed to see
+    @time_off_request = policy_scope(TimeOffRequest).find(params[:id])
   end
 
   def authorize_request
     authorize @time_off_request
   end
 
+  def load_form_options
+    @time_off_types = TimeOffRequest.time_off_types.keys
+  end
+
   def time_off_request_params
     params.require(:time_off_request).permit(
-      :time_off_type_id,
+      :time_off_type,
       :start_date,
       :end_date,
       :reason

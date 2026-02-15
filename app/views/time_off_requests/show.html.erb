@@ -38,10 +38,7 @@
           
           <div class="col-md-6">
             <h6 class="text-muted mb-1">Leave Type</h6>
-            <p class="h5"><%= @time_off_request.time_off_type.name %></p>
-            <% if @time_off_request.time_off_type.description.present? %>
-              <p class="text-muted mb-0"><%= @time_off_request.time_off_type.description %></p>
-            <% end %>
+            <p class="h5"><%= @time_off_request.time_off_type.humanize %></p>
           </div>
         </div>
 
@@ -170,7 +167,7 @@
                 <div class="d-flex justify-content-between align-items-start">
                   <div>
                     <h6 class="mb-1">
-                      <%= approval.action_description %> by <%= approval.user.full_name %>
+                      <%= approval.decision_description %> by <%= approval.user.full_name %>
                     </h6>
                     <% if approval.notes.present? %>
                       <p class="mb-1"><%= approval.notes %></p>
