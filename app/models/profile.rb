@@ -1,10 +1,14 @@
 class Profile < ApplicationRecord
+  MIN_AGE_YEARS = 14
+
   belongs_to :user, inverse_of: :profile
   belongs_to :department, optional: true
   belongs_to :manager, class_name: "User", optional: true, inverse_of: :direct_report_profiles
 
   validates :first_name, :last_name, :birth_date, :phone_number, presence: true
   validates :user_id, uniqueness: true
+  validate :birth_date_cannot_be_in_future
+  validate :at_least_minimum_age
   validate :manager_cannot_be_self
   validate :manager_chain_cannot_cycle
 
@@ -13,6 +17,20 @@ class Profile < ApplicationRecord
   end
 
   private
+
+  def at_least_minimum_age
+    return if birth_date.blank?
+
+    cutoff = Date.current - MIN_AGE_YEARS.years
+    return if birth_date <= cutoff
+
+    errors.add(:birth_date, "must be at least #{MIN_AGE_YEARS} years old")
+  end
+
+  def birth_date_cannot_be_in_future
+    return if birth_date.blank?
+    errors.add(:birth_date, "cannot be in the future") if birth_date >= Date.current
+  end
 
   def manager_cannot_be_self
     return if manager_id.blank? || user_id.blank?

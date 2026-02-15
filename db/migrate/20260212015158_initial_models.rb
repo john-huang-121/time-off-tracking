@@ -33,7 +33,7 @@ class InitialModels < ActiveRecord::Migration[8.0]
 
       t.references :user, null: false, foreign_key: true
 
-      t.index [:user_id, :start_date, :end_date]
+      t.index [ :user_id, :start_date, :end_date ]
       t.index :status
       t.check_constraint "status IN (0,1,2,3)", name: "chk_time_off_requests_status"
       t.check_constraint "time_off_type IN (0,1,2)", name: "chk_time_off_requests_time_off_type"
@@ -48,9 +48,9 @@ class InitialModels < ActiveRecord::Migration[8.0]
       t.timestamps null: false
 
       t.references :time_off_request, null: false, foreign_key: true
-      t.references :approver, null: false, foreign_key: { to_table: :users }
+      t.references :reviewer, null: false, foreign_key: { to_table: :users }
 
-      t.index [:time_off_request_id, :created_at]
+      t.index [ :time_off_request_id, :created_at ]
       t.check_constraint "decision IN (0,1)", name: "chk_approvals_decision"
     end
   end
