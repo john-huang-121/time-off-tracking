@@ -1,0 +1,74 @@
+<%= form_with model: [current_user, @profile], local: true do |f| %>
+  <% if @profile.errors.any? %>
+    <div class="alert alert-danger">
+      <div class="d-flex align-items-center mb-2">
+        <i class="bi bi-exclamation-triangle me-2"></i>
+        <strong>Please fix the errors below.</strong>
+      </div>
+      <ul class="mb-0">
+        <% @profile.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="row g-3">
+    <div class="col-md-6">
+      <%= f.label :first_name, class: "form-label" %>
+      <%= f.text_field :first_name, class: "form-control", autocomplete: "given-name", autofocus: true %>
+    </div>
+
+    <div class="col-md-6">
+      <%= f.label :last_name, class: "form-label" %>
+      <%= f.text_field :last_name, class: "form-control", autocomplete: "family-name" %>
+    </div>
+
+    <div class="col-md-6">
+      <%= f.label :birthdate, "Birth date", class: "form-label" %>
+      <%= f.date_field :birthdate, class: "form-control" %>
+      <div class="form-text">Used for verification and HR records.</div>
+    </div>
+
+    <div class="col-md-6">
+      <%= f.label :phone_number, class: "form-label" %>
+      <%= f.telephone_field :phone_number, class: "form-control", autocomplete: "tel" %>
+      <div class="form-text">Used for urgent approval requests.</div>
+    </div>
+
+    <div class="col-md-6">
+      <%= f.label :department_id, "Department", class: "form-label" %>
+      <%= f.collection_select :department_id,
+            @departments,
+            :id,
+            :name,
+            { prompt: "Select a department" },
+            { class: "form-select" } %>
+    </div>
+
+    <div class="col-md-6">
+      <%= f.label :manager_id, "Manager (optional)", class: "form-label" %>
+      <%= f.collection_select :manager_id,
+            @managers,
+            :id,
+            :email,
+            { include_blank: true },
+            { class: "form-select" } %>
+      <div class="form-text">If you’re a manager/admin, you can leave this blank.</div>
+    </div>
+  </div>
+
+  <hr class="my-4">
+
+  <div class="d-flex justify-content-between align-items-center">
+    <div class="text-muted">
+      <i class="bi bi-envelope"></i>
+      Signed in as <strong><%= current_user.email %></strong>
+    </div>
+
+    <div class="d-flex gap-2">
+      <%= link_to "Skip for now", root_path, class: "btn btn-outline-secondary" %>
+      <%= f.submit(@profile.persisted? ? "Update Profile" : "Save Profile", class: "btn btn-primary") %>
+    </div>
+  </div>
+<% end %>

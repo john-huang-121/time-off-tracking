@@ -10,11 +10,13 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
   # Root route
   root "dashboard#index"
+  get "dashboard", to: "dashboard#index"
 
   devise_for :users
 
-  # Dashboard
-  get "dashboard", to: "dashboard#index"
+  resources :users, only: [] do
+    resource :profile, only: %i[show new create edit update]
+  end
 
   # Time Off Requests
   resources :time_off_requests do
@@ -22,26 +24,6 @@ Rails.application.routes.draw do
       post :approve
       post :deny
       post :cancel
-    end
-  end
-
-  # API routes
-  namespace :api do
-    namespace :v1 do
-      resources :time_off_requests, only: [:index, :show, :create, :update, :destroy] do
-        member do
-          post :approve
-          post :deny
-          post :cancel
-        end
-      end
-
-      resources :users, only: [:index, :show] do
-        resources :time_off_requests, only: [:index]
-      end
-
-      resources :time_off_types, only: [:index, :show]
-      resources :departments, only: [:index, :show]
     end
   end
 end

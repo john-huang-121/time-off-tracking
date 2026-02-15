@@ -19,4 +19,11 @@ class User < ApplicationRecord
 
   # Convenience
   delegate :name, :department, :manager, to: :profile, allow_nil: true
+
+  def profile_complete?
+    profile.present? &&
+      profile.department_id.present? &&
+      profile.first_name.present? &&
+      profile.last_name.present?
+  end
 end
