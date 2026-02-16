@@ -23,4 +23,5 @@ Things you may want to cover:
 
 * ...
 
- bundle exec sidekiq -C config/sidekiq.yml
+wsl sudo service redis-server start
+bundle exec sidekiq -C config/sidekiq.yml

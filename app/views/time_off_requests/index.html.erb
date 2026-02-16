@@ -1,122 +1,122 @@
 <div class="row mb-4">
-  <div class="col">
-    <div class="d-flex justify-content-between align-items-center">
-      <h1 class="h2">
-        <i class="bi bi-calendar-check"></i> Time-Off Requests
-      </h1>
-      <%= link_to new_time_off_request_path, class: "btn btn-primary" do %>
-        <i class="bi bi-plus-circle"></i> New Request
-      <% end %>
+    <div class="col">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 class="h2">
+                <i class="bi bi-calendar-check"></i> Time-Off Requests
+            </h1>
+            <%= link_to new_time_off_request_path, class: "btn btn-primary" do %>
+            <i class="bi bi-plus-circle"></i> New Request
+            <% end %>
+        </div>
     </div>
-  </div>
 </div>
 
 <!-- Filters -->
 <div class="row mb-3">
-  <div class="col">
-    <div class="card">
-      <div class="card-body">
-        <%= form_with url: time_off_requests_path, method: :get, class: "row g-3" do %>
-          <div class="col-md-4">
-            <label class="form-label">Status</label>
-            <%= select_tag :status, 
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <%= form_with url: time_off_requests_path, method: :get, class: "row g-3" do %>
+                <div class="col-md-4">
+                    <label class="form-label">Status</label>
+                    <%= select_tag :status, 
                 options_for_select([
                   ['All Statuses', ''],
                   ['Pending', 'pending'],
                   ['Approved', 'approved'],
                   ['Denied', 'denied'],
-                  ['Cancelled', 'cancelled']
+                  ['Canceled', 'canceled']
                 ], params[:status]),
                 class: "form-select" %>
-          </div>
-          
-          <div class="col-md-4 d-flex align-items-end">
-            <%= submit_tag "Filter", class: "btn btn-secondary me-2" %>
-            <%= link_to "Clear", time_off_requests_path, class: "btn btn-outline-secondary" %>
-          </div>
-        <% end %>
-      </div>
+                </div>
+
+                <div class="col-md-4 d-flex align-items-end">
+                    <%= submit_tag "Filter", class: "btn btn-secondary me-2" %>
+                    <%= link_to "Clear", time_off_requests_path, class: "btn btn-outline-secondary" %>
+                </div>
+                <% end %>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 <!-- Requests Table -->
 <div class="card">
-  <div class="card-body p-0">
-    <% if @time_off_requests.any? %>
-      <div class="table-responsive">
-        <table class="table table-hover mb-0">
-          <thead class="table-light">
-            <tr>
-              <% if current_user.role_admin? || current_user.role_manager? %>
-                <th>Employee</th>
-              <% end %>
-              <th>Type</th>
-              <th>Start Date</th>
-              <th>End Date</th>
-              <th>Days</th>
-              <th>Status</th>
-              <th>Submitted</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @time_off_requests.each do |request| %>
-              <tr>
-                <% if current_user.role_admin? || current_user.role_manager? %>
-                  <td>
-                    <strong><%= request.user.full_name %></strong><br>
-                    <small class="text-muted"><%= request.user.department&.name %></small>
-                  </td>
-                <% end %>
-                <td><%= request.time_off_type.humanize %></td>
-                <td><%= request.start_date.strftime('%b %d, %Y') %></td>
-                <td><%= request.end_date.strftime('%b %d, %Y') %></td>
-                <td><span class="badge bg-secondary"><%= request.total_days %></span></td>
-                <td>
-                  <% case request.status %>
-                  <% when 'pending' %>
-                    <span class="badge bg-warning status-badge">Pending</span>
-                  <% when 'approved' %>
-                    <span class="badge bg-success status-badge">Approved</span>
-                  <% when 'denied' %>
-                    <span class="badge bg-danger status-badge">Denied</span>
-                  <% when 'cancelled' %>
-                    <span class="badge bg-secondary status-badge">Cancelled</span>
-                  <% end %>
-                </td>
-                <td>
-                  <small class="text-muted">
-                    <%= time_ago_in_words(request.created_at) %> ago
-                  </small>
-                </td>
-                <td>
-                  <%= link_to request, class: "btn btn-sm btn-outline-primary" do %>
-                    <i class="bi bi-eye"></i> View
-                  <% end %>
-                  
-                  <% if policy(request).update? %>
-                    <%= link_to edit_time_off_request_path(request), class: "btn btn-sm btn-outline-secondary" do %>
-                      <i class="bi bi-pencil"></i>
+    <div class="card-body p-0">
+        <% if @time_off_requests.any? %>
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <% if current_user.role_admin? || current_user.role_manager? %>
+                        <th>Employee</th>
+                        <% end %>
+                        <th>Type</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Days</th>
+                        <th>Status</th>
+                        <th>Submitted</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% @time_off_requests.each do |request| %>
+                    <tr>
+                        <% if current_user.role_admin? || current_user.role_manager? %>
+                        <td>
+                            <strong><%= request.user.full_name %></strong><br>
+                            <small class="text-muted"><%= request.user.department&.name %></small>
+                        </td>
+                        <% end %>
+                        <td><%= request.time_off_type.humanize %></td>
+                        <td><%= request.start_date.strftime('%b %d, %Y') %></td>
+                        <td><%= request.end_date.strftime('%b %d, %Y') %></td>
+                        <td><span class="badge bg-secondary"><%= request.total_days %></span></td>
+                        <td>
+                            <% case request.status %>
+                            <% when 'pending' %>
+                            <span class="badge bg-warning status-badge">Pending</span>
+                            <% when 'approved' %>
+                            <span class="badge bg-success status-badge">Approved</span>
+                            <% when 'denied' %>
+                            <span class="badge bg-danger status-badge">Denied</span>
+                            <% when 'canceled' %>
+                            <span class="badge bg-secondary status-badge">canceled</span>
+                            <% end %>
+                        </td>
+                        <td>
+                            <small class="text-muted">
+                                <%= time_ago_in_words(request.created_at) %> ago
+                            </small>
+                        </td>
+                        <td>
+                            <%= link_to request, class: "btn btn-sm btn-outline-primary" do %>
+                            <i class="bi bi-eye"></i> View
+                            <% end %>
+
+                            <% if policy(request).update? %>
+                            <%= link_to edit_time_off_request_path(request), class: "btn btn-sm btn-outline-secondary" do %>
+                            <i class="bi bi-pencil"></i>
+                            <% end %>
+                            <% end %>
+                        </td>
+                    </tr>
                     <% end %>
-                  <% end %>
-                </td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-      </div>
-      
-      <!-- Pagination -->
-      <div class="card-footer bg-white">
-        <%= paginate @time_off_requests %>
-      </div>
-    <% else %>
-      <div class="text-center py-5">
-        <i class="bi bi-inbox text-muted" style="font-size: 3rem;"></i>
-        <p class="text-muted mt-3">No time-off requests found.</p>
-        <%= link_to "Create your first request", new_time_off_request_path, class: "btn btn-primary" %>
-      </div>
-    <% end %>
-  </div>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="card-footer bg-white">
+            <%= paginate @time_off_requests %>
+        </div>
+        <% else %>
+        <div class="text-center py-5">
+            <i class="bi bi-inbox text-muted" style="font-size: 3rem;"></i>
+            <p class="text-muted mt-3">No time-off requests found.</p>
+            <%= link_to "Create your first request", new_time_off_request_path, class: "btn btn-primary" %>
+        </div>
+        <% end %>
+    </div>
 </div>

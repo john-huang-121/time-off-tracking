@@ -35,14 +35,13 @@ class InitialModels < ActiveRecord::Migration[8.0]
 
       t.index [ :user_id, :start_date, :end_date ]
       t.index :status
-      t.check_constraint "status IN (0,1,2,3)", name: "chk_time_off_requests_status"
       t.check_constraint "time_off_type IN (0,1,2)", name: "chk_time_off_requests_time_off_type"
+      t.check_constraint "status IN (0,1,2,3)", name: "chk_time_off_requests_status"
       t.check_constraint "start_date <= end_date", name: "chk_time_off_requests_date_range"
     end
 
-
     create_table :approvals do |t|
-      t.integer :decision, null: false # 0 = approved, 1 = denied
+      t.integer :decision, null: false # 0 = approved, 1 = denied, 2 = canceled
       t.text :comment
 
       t.timestamps null: false
@@ -51,7 +50,7 @@ class InitialModels < ActiveRecord::Migration[8.0]
       t.references :reviewer, null: false, foreign_key: { to_table: :users }
 
       t.index [ :time_off_request_id, :created_at ]
-      t.check_constraint "decision IN (0,1)", name: "chk_approvals_decision"
+      t.check_constraint "decision IN (0,1,2)", name: "chk_approvals_decision"
     end
   end
 end

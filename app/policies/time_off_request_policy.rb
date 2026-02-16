@@ -36,11 +36,9 @@ class TimeOffRequestPolicy < ApplicationPolicy
       if user.role_admin?
         scope.all
       elsif user.role_manager?
-        # Managers see their own requests + their direct reports' requests
-        scope.where(user_id: user.id)
-             .or(scope.joins(:user).where(users: { manager_id: user.id }))
+        ids = [ user.id ] + user.direct_reports.pluck(:id)
+        scope.where(user_id: ids)
       else
-        # Employees see only their own requests
         scope.where(user_id: user.id)
       end
     end

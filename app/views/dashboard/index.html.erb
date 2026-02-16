@@ -1,235 +1,234 @@
 <div class="row mb-4">
-  <div class="col">
-    <h1 class="h2">
-      <i class="bi bi-speedometer2"></i> Dashboard
-    </h1>
-    <p class="text-muted">Welcome back, <%= current_user.full_name.presence || current_user.email %>!</p>
-  </div>
+    <div class="col">
+        <h1 class="h2">
+            <i class="bi bi-speedometer2"></i> Dashboard
+        </h1>
+        <p class="text-muted">Welcome back, <%= current_user.full_name.presence || current_user.email %>!</p>
+    </div>
 </div>
 
 <!-- Stats Cards -->
 <div class="row mb-4">
-  <div class="col-md-3 mb-3">
-    <div class="card card-stats">
-      <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center">
-          <div>
-            <p class="text-muted mb-1">Total Requests</p>
-            <h3 class="mb-0"><%= @stats[:total_requests] %></h3>
-          </div>
-          <div class="text-primary">
-            <i class="bi bi-calendar-check fs-1"></i>
-          </div>
+    <div class="col-md-3 mb-3">
+        <div class="card card-stats">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="text-muted mb-1">Total Requests</p>
+                        <h3 class="mb-0"><%= @stats[:total_requests] %></h3>
+                    </div>
+                    <div class="text-primary">
+                        <i class="bi bi-calendar-check fs-1"></i>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 
-  <div class="col-md-3 mb-3">
-    <div class="card card-stats border-success">
-      <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center">
-          <div>
-            <p class="text-muted mb-1">Approved</p>
-            <h3 class="mb-0 text-success"><%= @stats[:approved_requests] %></h3>
-          </div>
-          <div class="text-success">
-            <i class="bi bi-check-circle fs-1"></i>
-          </div>
+    <div class="col-md-3 mb-3">
+        <div class="card card-stats border-success">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="text-muted mb-1">Approved</p>
+                        <h3 class="mb-0 text-success"><%= @stats[:approved_requests] %></h3>
+                    </div>
+                    <div class="text-success">
+                        <i class="bi bi-check-circle fs-1"></i>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 
-  <div class="col-md-3 mb-3">
-    <div class="card card-stats border-warning">
-      <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center">
-          <div>
-            <p class="text-muted mb-1">Pending</p>
-            <h3 class="mb-0 text-warning"><%= @stats[:pending_requests] %></h3>
-          </div>
-          <div class="text-warning">
-            <i class="bi bi-clock-history fs-1"></i>
-          </div>
+    <div class="col-md-3 mb-3">
+        <div class="card card-stats border-warning">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="text-muted mb-1">Pending</p>
+                        <h3 class="mb-0 text-warning"><%= @stats[:pending_requests] %></h3>
+                    </div>
+                    <div class="text-warning">
+                        <i class="bi bi-clock-history fs-1"></i>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 
-  <div class="col-md-3 mb-3">
-    <div class="card card-stats border-info">
-      <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center">
-          <div>
-            <p class="text-muted mb-1">Days Remaining</p>
-            <h3 class="mb-0 text-info"><%= @remaining_vacation_days %></h3>
-          </div>
-          <div class="text-info">
-            <i class="bi bi-calendar3 fs-1"></i>
-          </div>
+    <div class="col-md-3 mb-3">
+        <div class="card card-stats border-info">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="text-muted mb-1">Days Remaining</p>
+                        <h3 class="mb-0 text-info"><%= @remaining_vacation_days %></h3>
+                    </div>
+                    <div class="text-info">
+                        <i class="bi bi-calendar3 fs-1"></i>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </div>
 
 <!-- Quick Actions -->
 <div class="row mb-4">
-  <div class="col">
-    <div class="card">
-      <div class="card-header bg-white">
-        <h5 class="mb-0">Quick Actions</h5>
-      </div>
-      <div class="card-body">
-        <%= link_to new_time_off_request_path, class: "btn btn-primary me-2" do %>
-          <i class="bi bi-plus-circle"></i> New Time-Off Request
-        <% end %>
-        <%= link_to time_off_requests_path, class: "btn btn-outline-secondary" do %>
-          <i class="bi bi-list-ul"></i> View All Requests
-        <% end %>
-      </div>
+    <div class="col">
+        <div class="card">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <%= link_to new_time_off_request_path, class: "btn btn-primary me-2" do %>
+                <i class="bi bi-plus-circle"></i> New Time-Off Request
+                <% end %>
+                <%= link_to time_off_requests_path, class: "btn btn-outline-secondary" do %>
+                <i class="bi bi-list-ul"></i> View All Requests
+                <% end %>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 <!-- Requests to Review (for Managers/Admins) -->
-<% if @requests_to_review.present? %>
-<%# <% if (current_user.role_manager? || current_user.role_admin?) && @requests_to_review.present? %> %>
-  <div class="row mb-4">
+<% if (current_user.role_manager? || current_user.role_admin?) && @requests_to_review.present? %>
+<div class="row mb-4">
     <div class="col">
-      <div class="card">
-        <div class="card-header bg-warning bg-opacity-10">
-          <h5 class="mb-0">
-            <i class="bi bi-clipboard-check"></i> Requests Awaiting Your Review
-            <span class="badge bg-warning"><%= @requests_to_review.count %></span>
-          </h5>
+        <div class="card">
+            <div class="card-header bg-warning bg-opacity-10">
+                <h5 class="mb-0">
+                    <i class="bi bi-clipboard-check"></i> Requests Awaiting Your Review
+                    <span class="badge bg-warning"><%= @requests_to_review.count %></span>
+                </h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Employee</th>
+                                <th>Type</th>
+                                <th>Dates</th>
+                                <th>Days</th>
+                                <th>Submitted</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% @requests_to_review.each do |request| %>
+                            <tr>
+                                <td>
+                                    <strong><%= current_user.full_name.presence || current_user.email %></strong><br>
+                                    <small class="text-muted"><%= request.user.department&.name %></small>
+                                </td>
+                                <td><%= request.time_off_type.humanize %></td>
+                                <td>
+                                    <small>
+                                        <%= request.start_date.strftime('%b %d') %> -
+                                        <%= request.end_date.strftime('%b %d, %Y') %>
+                                    </small>
+                                </td>
+                                <td><span class="badge bg-secondary"><%= request.total_days %> days</span></td>
+                                <td><small class="text-muted"><%= time_ago_in_words(request.created_at) %> ago</small></td>
+                                <td>
+                                    <%= link_to request, class: "btn btn-sm btn-outline-primary" do %>
+                                    <i class="bi bi-eye"></i> Review
+                                    <% end %>
+                                </td>
+                            </tr>
+                            <% end %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-        <div class="card-body p-0">
-          <div class="table-responsive">
-            <table class="table table-hover mb-0">
-              <thead class="table-light">
-                <tr>
-                  <th>Employee</th>
-                  <th>Type</th>
-                  <th>Dates</th>
-                  <th>Days</th>
-                  <th>Submitted</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <% @requests_to_review.each do |request| %>
-                  <tr>
-                    <td>
-                      <strong><%= current_user.full_name.presence || current_user.email %></strong><br>
-                      <small class="text-muted"><%= request.user.department&.name %></small>
-                    </td>
-                    <td><%= request.time_off_type.humanize %></td>
-                    <td>
-                      <small>
-                        <%= request.start_date.strftime('%b %d') %> - 
-                        <%= request.end_date.strftime('%b %d, %Y') %>
-                      </small>
-                    </td>
-                    <td><span class="badge bg-secondary"><%= request.total_days %> days</span></td>
-                    <td><small class="text-muted"><%= time_ago_in_words(request.created_at) %> ago</small></td>
-                    <td>
-                      <%= link_to request, class: "btn btn-sm btn-outline-primary" do %>
-                        <i class="bi bi-eye"></i> Review
-                      <% end %>
-                    </td>
-                  </tr>
-                <% end %>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
     </div>
-  </div>
+</div>
 <% end %>
 
 <!-- My Pending Requests -->
 <% if @pending_requests.present? %>
-  <div class="row mb-4">
+<div class="row mb-4">
     <div class="col">
-      <div class="card">
-        <div class="card-header bg-white">
-          <h5 class="mb-0">
-            <i class="bi bi-hourglass-split"></i> My Pending Requests
-          </h5>
+        <div class="card">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-hourglass-split"></i> My Pending Requests
+                </h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Type</th>
+                                <th>Dates</th>
+                                <th>Days</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% @pending_requests.each do |request| %>
+                            <tr>
+                                <td><%= request.time_off_type.humanize %></td>
+                                <td>
+                                    <%= request.start_date.strftime('%b %d') %> -
+                                    <%= request.end_date.strftime('%b %d, %Y') %>
+                                </td>
+                                <td><span class="badge bg-secondary"><%= request.total_days %> days</span></td>
+                                <td><span class="badge bg-warning status-badge">Pending</span></td>
+                                <td>
+                                    <%= link_to request, class: "btn btn-sm btn-outline-primary" do %>
+                                    <i class="bi bi-eye"></i> View
+                                    <% end %>
+                                </td>
+                            </tr>
+                            <% end %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-        <div class="card-body p-0">
-          <div class="table-responsive">
-            <table class="table table-hover mb-0">
-              <thead class="table-light">
-                <tr>
-                  <th>Type</th>
-                  <th>Dates</th>
-                  <th>Days</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <% @pending_requests.each do |request| %>
-                  <tr>
-                    <td><%= request.time_off_type.humanize %></td>
-                    <td>
-                      <%= request.start_date.strftime('%b %d') %> - 
-                      <%= request.end_date.strftime('%b %d, %Y') %>
-                    </td>
-                    <td><span class="badge bg-secondary"><%= request.total_days %> days</span></td>
-                    <td><span class="badge bg-warning status-badge">Pending</span></td>
-                    <td>
-                      <%= link_to request, class: "btn btn-sm btn-outline-primary" do %>
-                        <i class="bi bi-eye"></i> View
-                      <% end %>
-                    </td>
-                  </tr>
-                <% end %>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
     </div>
-  </div>
+</div>
 <% end %>
 
 <!-- Upcoming Time Off -->
 <% if @upcoming_time_off.present? %>
-  <div class="row mb-4">
+<div class="row mb-4">
     <div class="col">
-      <div class="card">
-        <div class="card-header bg-white">
-          <h5 class="mb-0">
-            <i class="bi bi-calendar-event"></i> Upcoming Approved Time Off
-          </h5>
-        </div>
-        <div class="card-body p-0">
-          <div class="list-group list-group-flush">
-            <% @upcoming_time_off.each do |request| %>
-              <div class="list-group-item">
-                <div class="d-flex justify-content-between align-items-center">
-                  <div>
-                    <h6 class="mb-1"><%= request.time_off_type.humanize %></h6>
-                    <p class="mb-1">
-                      <%= request.start_date.strftime('%B %d, %Y') %> - 
-                      <%= request.end_date.strftime('%B %d, %Y') %>
-                    </p>
-                    <small class="text-muted"><%= request.total_days %> business days</small>
-                  </div>
-                  <div>
-                    <%= link_to "View", request, class: "btn btn-sm btn-outline-secondary" %>
-                  </div>
+        <div class="card">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-calendar-event"></i> Upcoming Approved Time Off
+                </h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="list-group list-group-flush">
+                    <% @upcoming_time_off.each do |request| %>
+                    <div class="list-group-item">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1"><%= request.time_off_type.humanize %></h6>
+                                <p class="mb-1">
+                                    <%= request.start_date.strftime('%B %d, %Y') %> -
+                                    <%= request.end_date.strftime('%B %d, %Y') %>
+                                </p>
+                                <small class="text-muted"><%= request.total_days %> business days</small>
+                            </div>
+                            <div>
+                                <%= link_to "View", request, class: "btn btn-sm btn-outline-secondary" %>
+                            </div>
+                        </div>
+                    </div>
+                    <% end %>
                 </div>
-              </div>
-            <% end %>
-          </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
+</div>
 <% end %>

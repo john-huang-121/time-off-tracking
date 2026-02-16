@@ -1,6 +1,6 @@
 class TimeOffRequestsController < ApplicationController
-  before_action :set_time_off_request, only: %i[show edit update destroy approve deny cancel]
-  before_action :authorize_request,    only: %i[show edit update destroy approve deny cancel]
+  before_action :set_time_off_request, only: %i[show edit update approve deny cancel]
+  before_action :authorize_request,    only: %i[show edit update approve deny cancel]
   before_action :load_form_options,    only: %i[new create edit update]
 
   def index
@@ -35,8 +35,7 @@ class TimeOffRequestsController < ApplicationController
     end
   end
 
-  def edit
-  end
+  def edit; end
 
   def update
     if @time_off_request.update(time_off_request_params)
@@ -46,14 +45,14 @@ class TimeOffRequestsController < ApplicationController
     end
   end
 
-  def destroy
-    @time_off_request.destroy
-    redirect_to time_off_requests_url, notice: "Time-off request was successfully deleted."
-  end
+  # def destroy
+  #   @time_off_request.destroy
+  #   redirect_to time_off_requests_url, notice: "Time-off request was successfully deleted."
+  # end
 
   def approve
-    notes = params.dig(:approval, :notes) || params[:notes]
-    if @time_off_request.approve!(reviewer: current_user, notes: notes)
+    comment = approval_comment
+    if @time_off_request.approve!(reviewer: current_user, comment: comment)
       redirect_to @time_off_request, notice: "Time-off request approved successfully."
     else
       redirect_to @time_off_request, alert: "Unable to approve time-off request."
@@ -61,8 +60,8 @@ class TimeOffRequestsController < ApplicationController
   end
 
   def deny
-    notes = params.dig(:approval, :notes) || params[:notes]
-    if @time_off_request.deny!(reviewer: current_user, notes: notes)
+    comment = approval_comment
+    if @time_off_request.deny!(reviewer: current_user, comment: comment)
       redirect_to @time_off_request, notice: "Time-off request denied."
     else
       redirect_to @time_off_request, alert: "Unable to deny time-off request."
@@ -70,15 +69,19 @@ class TimeOffRequestsController < ApplicationController
   end
 
   def cancel
-    notes = params.dig(:approval, :notes) || params[:notes]
-    if @time_off_request.cancel!(reviewer: current_user, notes: notes)
-      redirect_to @time_off_request, notice: "Time-off request cancelled."
+    comment = approval_comment
+    if @time_off_request.cancel!(reviewer: current_user, comment: comment)
+      redirect_to @time_off_request, notice: "Time-off request canceled."
     else
       redirect_to @time_off_request, alert: "Unable to cancel time-off request."
     end
   end
 
   private
+
+  def approval_comment
+    params.dig(:approval, :comment) || params[:comment]
+  end
 
   def set_time_off_request
     # IMPORTANT: scope the find to what the user is allowed to see

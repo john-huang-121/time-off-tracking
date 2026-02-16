@@ -12,7 +12,7 @@ class DashboardController < ApplicationController
       if current_user.role_manager? || current_user.role_admin?
         TimeOffRequest
           .for_approval_by(current_user)
-          .includes(user: :profile) # only if your view calls request.user.profile / department, etc.
+          .includes(user: :profile)
           .ordered
           .limit(10)
       else
@@ -22,10 +22,7 @@ class DashboardController < ApplicationController
     # Stats (avoid repeating similar scopes)
     year_scope = my_requests.current_year.unscope(:order)
 
-    raw_counts = year_scope.group(:status).count # status is an enum int in DB
-
-    # Convert {0=>3, 1=>5} into {"pending"=>3, "approved"=>5}
-    status_counts = raw_counts.transform_keys { |i| TimeOffRequest.statuses.key(i) }
+    status_counts = year_scope.group(:status).count
 
     @stats = {
       total_requests:    year_scope.count,

@@ -24,7 +24,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_12_015158) do
     t.index ["reviewer_id"], name: "index_approvals_on_reviewer_id"
     t.index ["time_off_request_id", "created_at"], name: "index_approvals_on_time_off_request_id_and_created_at"
     t.index ["time_off_request_id"], name: "index_approvals_on_time_off_request_id"
-    t.check_constraint "decision = ANY (ARRAY[0, 1])", name: "chk_approvals_decision"
+    t.check_constraint "decision = ANY (ARRAY[0, 1, 2])", name: "chk_approvals_decision"
   end
 
   create_table "departments", force: :cascade do |t|
