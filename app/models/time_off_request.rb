@@ -10,9 +10,10 @@ class TimeOffRequest < ApplicationRecord
   scope :current_year, -> { where(start_date: Date.current.beginning_of_year..Date.current.end_of_year) }
   scope :upcoming, -> { where("start_date >= ?", Date.current) }
 
-
   validates :start_date, :end_date, :time_off_type, :status, presence: true
   validate :end_date_on_or_after_start_date
+
+  after_create_commit -> { TimeOffRequestMailer.request_created(id).deliver_later }
 
   def reviewed_by
     latest_approval&.reviewer

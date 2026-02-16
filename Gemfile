@@ -72,3 +72,5 @@ gem "pundit", "~> 2.5"
 # Pagination
 gem "kaminari", "~> 1.2"
 gem "kaminari-bootstrap", "~> 3.0"
+
+gem "sidekiq", "~> 8.1"

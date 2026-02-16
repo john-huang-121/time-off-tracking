@@ -17,16 +17,17 @@ end
 
 default_password = "Password123!"
 
-managers = [
-  { email: "hr.manager1@example.com",  first_name: "Hannah", last_name: "Reed",  dept: "Human Resources", birth_date: Date.new(1988, 4, 12), phone: "714-555-0101" },
-  { email: "mkt.manager1@example.com", first_name: "Marco",  last_name: "Klein", dept: "Marketing",      birth_date: Date.new(1986, 9, 3),  phone: "714-555-0102" },
-  { email: "eng.manager1@example.com", first_name: "Evelyn", last_name: "Chen",  dept: "Engineering",    birth_date: Date.new(1990, 1, 27), phone: "714-555-0103" },
-  { email: "eng.manager2@example.com", first_name: "Omar",   last_name: "Patel", dept: "Engineering",    birth_date: Date.new(1987, 6, 19), phone: "714-555-0104" }
+people = [
+  { email: "admin@example.com",        first_name: "Admin",  last_name: "Admin", dept: "Human Resources", role: :admin, birth_date: Date.new(1988, 4, 12), phone: "714-555-0105" },
+  { email: "hr.manager1@example.com",  first_name: "Hannah", last_name: "Reed",  dept: "Human Resources", role: :manager, birth_date: Date.new(1988, 4, 12), phone: "714-555-0101" },
+  { email: "mkt.manager1@example.com", first_name: "Marco",  last_name: "Klein", dept: "Marketing", role: :manager, birth_date: Date.new(1986, 9, 3),  phone: "714-555-0102" },
+  { email: "eng.manager1@example.com", first_name: "Evelyn", last_name: "Chen",  dept: "Engineering", role: :manager, birth_date: Date.new(1990, 1, 27), phone: "714-555-0103" },
+  { email: "eng.manager2@example.com", first_name: "Omar",   last_name: "Patel", dept: "Engineering", role: :manager, birth_date: Date.new(1987, 6, 19), phone: "714-555-0104" }
 ]
 
-managers.each do |m|
+people.each do |m|
   user = User.find_or_initialize_by(email: m[:email])
-  user.role = :manager
+  user.role = m[:role]
   if user.new_record?
     user.password = default_password
     user.password_confirmation = default_password
@@ -44,4 +45,5 @@ managers.each do |m|
 end
 
 puts "Seeded #{Department.count} departments"
+puts "Seeded #{User.where(role: :admin).count} admins"
 puts "Seeded #{User.where(role: :manager).count} managers"

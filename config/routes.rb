@@ -1,4 +1,10 @@
+require "sidekiq/web"
+
 Rails.application.routes.draw do
+  authenticate :user, ->(u) { u.role_admin? } do
+    mount Sidekiq::Web => "/sidekiq" # access it at http://localhost:3000/sidekiq
+  end
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
