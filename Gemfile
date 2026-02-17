@@ -74,3 +74,7 @@ gem "kaminari", "~> 1.2"
 gem "kaminari-bootstrap", "~> 3.0"
 
 gem "sidekiq", "~> 8.1"
+
+gem "rswag", "~> 2.17"
+
+gem "rspec-rails", "~> 8.0"

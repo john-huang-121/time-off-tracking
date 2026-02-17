@@ -1,6 +1,9 @@
 require "sidekiq/web"
 
 Rails.application.routes.draw do
+  mount Rswag::Ui::Engine => "/api-docs"
+  mount Rswag::Api::Engine => "/api-docs"
+
   authenticate :user, ->(u) { u.role_admin? } do
     mount Sidekiq::Web => "/sidekiq" # access it at http://localhost:3000/sidekiq
   end
