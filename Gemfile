@@ -53,6 +53,15 @@ group :development, :test do
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
   gem "pry-byebug"
+
+  gem "rspec-rails", "~> 8.0"
+
+  gem "factory_bot_rails", "~> 6.5"
+  gem "faker", "~> 3.6"
+  gem "shoulda-matchers", "~> 7.0"
+  gem "database_cleaner-active_record", "~> 2.2"
+  gem "rswag", "~> 2.17"
+  gem "rails-controller-testing", "~> 1.0"
 end
 
 group :development do
@@ -74,7 +83,3 @@ gem "kaminari", "~> 1.2"
 gem "kaminari-bootstrap", "~> 3.0"
 
 gem "sidekiq", "~> 8.1"
-
-gem "rswag", "~> 2.17"
-
-gem "rspec-rails", "~> 8.0"

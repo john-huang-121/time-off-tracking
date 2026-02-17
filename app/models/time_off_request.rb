@@ -26,7 +26,7 @@ class TimeOffRequest < ApplicationRecord
 
   delegate :reviewed_at, :review_notes, to: :latest_approval, prefix: true, allow_nil: true
 
-  after_create_commit -> { TimeOffRequestMailer.request_created(id).deliver_later }
+  after_create_commit :notify_reviewer
   after_update_commit :notify_status_change, if: -> { saved_change_to_status? }
 
   def reviewed_by
@@ -55,6 +55,11 @@ class TimeOffRequest < ApplicationRecord
   end
 
   private
+
+  def notify_reviewer
+    return if user.manager.blank?
+    TimeOffRequestMailer.request_created(id).deliver_later
+  end
 
   def notify_status_change
     prev_status, new_status = saved_change_to_status

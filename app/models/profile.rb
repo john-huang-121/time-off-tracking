@@ -2,10 +2,10 @@ class Profile < ApplicationRecord
   MIN_AGE_YEARS = 14
 
   belongs_to :user, inverse_of: :profile
-  belongs_to :department, optional: true
+  belongs_to :department, inverse_of: :profiles
   belongs_to :manager, class_name: "User", optional: true, inverse_of: :direct_report_profiles
 
-  validates :first_name, :last_name, :birth_date, :phone_number, presence: true
+  validates :first_name, :last_name, :birth_date, :phone_number, :department_id, presence: true
   validates :user_id, uniqueness: true
   validate :birth_date_cannot_be_in_future
   validate :at_least_minimum_age

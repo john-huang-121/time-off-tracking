@@ -23,14 +23,7 @@ RSpec.configure do |config|
       },
       paths: {},
       servers: [
-        {
-          url: 'https://{defaultHost}',
-          variables: {
-            defaultHost: {
-              default: 'www.example.com'
-            }
-          }
-        }
+        { url: ENV.fetch("SWAGGER_BASE_URL", "http://localhost:3000") }
       ]
     }
   }

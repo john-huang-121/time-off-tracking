@@ -1,0 +1,218 @@
+---
+openapi: 3.0.1
+info:
+  title: API V1
+  version: v1
+paths:
+  "/dashboard":
+    get:
+      summary: Dashboard (HTML)
+      tags:
+        - Dashboard
+      responses:
+        "302":
+          description: redirects when unauthenticated
+        "200":
+          description: renders when authenticated
+  "/time_off_requests":
+    get:
+      summary: List all time off requests
+      tags:
+        - Time Off Requests
+      parameters:
+        - name: page
+          in: query
+          required: false
+          description: Page number
+          schema:
+            type: integer
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum:
+              - pending
+              - approved
+              - denied
+              - canceled
+      responses:
+        "200":
+          description: time off requests found
+        "302":
+          description: redirects to sign in when unauthenticated
+    post:
+      summary: Create a time off request
+      tags:
+        - Time Off Requests
+      parameters: []
+      responses:
+        "302":
+          description: redirects to sign in when unauthenticated
+        "422":
+          description: invalid request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                time_off_request:
+                  type: object
+                  properties:
+                    start_date:
+                      type: string
+                      format: date
+                    end_date:
+                      type: string
+                      format: date
+                    time_off_type:
+                      type: string
+                      enum:
+                        - vacation
+                        - sick
+                        - personal
+                    reason:
+                      type: string
+                      nullable: true
+                  required:
+                    - start_date
+                    - end_date
+                    - time_off_type
+  "/time_off_requests/{id}":
+    parameters:
+      - name: id
+        in: path
+        description: Time off request ID
+        required: true
+        schema:
+          type: integer
+    get:
+      summary: Retrieve a time off request
+      tags:
+        - Time Off Requests
+      responses:
+        "200":
+          description: time off request found
+        "404":
+          description: time off request not found
+        "302":
+          description: redirects to sign in when unauthenticated
+    patch:
+      summary: Update a time off request
+      tags:
+        - Time Off Requests
+      parameters: []
+      responses:
+        "302":
+          description: time off request updated (redirect)
+        "422":
+          description: invalid request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                time_off_request:
+                  type: object
+                  properties:
+                    start_date:
+                      type: string
+                      format: date
+                    end_date:
+                      type: string
+                      format: date
+                    time_off_type:
+                      type: string
+                      enum:
+                        - vacation
+                        - sick
+                        - personal
+                    reason:
+                      type: string
+    delete:
+      summary: Delete a time off request
+      tags:
+        - Time Off Requests
+      responses:
+        "302":
+          description: time off request deleted (redirect)
+        "404":
+          description: time off request not found
+  "/time_off_requests/{id}/approve":
+    parameters:
+      - name: id
+        in: path
+        description: Time off request ID
+        required: true
+        schema:
+          type: integer
+    post:
+      summary: approve a time off request
+      tags:
+        - Time Off Requests
+      parameters: []
+      responses:
+        "302":
+          description: approve performed (redirect)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                comment:
+                  type: string
+                  nullable: true
+  "/time_off_requests/{id}/deny":
+    parameters:
+      - name: id
+        in: path
+        description: Time off request ID
+        required: true
+        schema:
+          type: integer
+    post:
+      summary: deny a time off request
+      tags:
+        - Time Off Requests
+      parameters: []
+      responses:
+        "302":
+          description: deny performed (redirect)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                comment:
+                  type: string
+                  nullable: true
+  "/time_off_requests/{id}/cancel":
+    parameters:
+      - name: id
+        in: path
+        description: Time off request ID
+        required: true
+        schema:
+          type: integer
+    post:
+      summary: cancel a time off request
+      tags:
+        - Time Off Requests
+      parameters: []
+      responses:
+        "302":
+          description: cancel performed (redirect)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                comment:
+                  type: string
+                  nullable: true
+servers:
+  - url: http://localhost:3000

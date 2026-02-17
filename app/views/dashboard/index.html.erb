@@ -121,7 +121,7 @@
                             <% @requests_to_review.each do |request| %>
                             <tr>
                                 <td>
-                                    <strong><%= current_user.full_name.presence || current_user.email %></strong><br>
+                                    <strong><%= request.user.full_name.presence || request.user.email %></strong><br>
                                     <small class="text-muted"><%= request.user.department&.name %></small>
                                 </td>
                                 <td><%= request.time_off_type.humanize %></td>

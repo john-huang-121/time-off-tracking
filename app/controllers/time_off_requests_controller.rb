@@ -1,6 +1,6 @@
 class TimeOffRequestsController < ApplicationController
-  before_action :set_time_off_request, only: %i[show edit update approve deny cancel]
-  before_action :authorize_request,    only: %i[show edit update approve deny cancel]
+  before_action :set_time_off_request, only: %i[show edit update destroy approve deny cancel]
+  before_action :authorize_request,    only: %i[show edit update destroy approve deny cancel]
   before_action :load_form_options,    only: %i[new create edit update]
 
   def index
@@ -13,10 +13,20 @@ class TimeOffRequestsController < ApplicationController
     end
 
     @time_off_requests = scope.page(params[:page]).per(20)
+
+    respond_to do |format|
+      format.html
+      format.json { render json: { time_off_requests: @time_off_requests } }
+    end
   end
 
   def show
     @approvals = @time_off_request.approvals.ordered
+
+    respond_to do |format|
+      format.html
+      format.json { render json: { time_off_request: @time_off_request } }
+    end
   end
 
   def new
@@ -29,9 +39,15 @@ class TimeOffRequestsController < ApplicationController
     authorize @time_off_request
 
     if @time_off_request.save
-      redirect_to @time_off_request, notice: "Time-off request was successfully created."
+      respond_to do |format|
+        format.html { redirect_to @time_off_request, notice: "Time-off request was successfully created." }
+        format.json { render json: { time_off_request: @time_off_request }, status: :created }
+      end
     else
-      render :new, status: :unprocessable_entity
+      respond_to do |format|
+        format.html { render :new, status: :unprocessable_entity }
+        format.json { render json: { errors: @time_off_request.errors }, status: :unprocessable_entity }
+      end
     end
   end
 
@@ -39,41 +55,69 @@ class TimeOffRequestsController < ApplicationController
 
   def update
     if @time_off_request.update(time_off_request_params)
-      redirect_to @time_off_request, notice: "Time-off request was successfully updated."
+      respond_to do |format|
+        format.html { redirect_to @time_off_request, notice: "Time-off request was successfully updated." }
+        format.json { render json: { time_off_request: @time_off_request } }
+      end
     else
-      render :edit, status: :unprocessable_entity
+      respond_to do |format|
+        format.html { render :edit, status: :unprocessable_entity }
+        format.json { render json: { errors: @time_off_request.errors }, status: :unprocessable_entity }
+      end
     end
   end
 
-  # def destroy
-  #   @time_off_request.destroy
-  #   redirect_to time_off_requests_url, notice: "Time-off request was successfully deleted."
-  # end
+  def destroy
+    @time_off_request.destroy
+
+    respond_to do |format|
+      format.html { redirect_to time_off_requests_url, notice: "Time-off request was successfully deleted." }
+      format.json { head :no_content }
+    end
+  end
 
   def approve
     comment = approval_comment
     if @time_off_request.approve!(reviewer: current_user, comment: comment)
-      redirect_to @time_off_request, notice: "Time-off request approved successfully."
+      respond_to do |format|
+        format.html { redirect_to @time_off_request, notice: "Time-off request approved successfully." }
+        format.json { render json: { time_off_request: @time_off_request, message: "Request approved" } }
+      end
     else
-      redirect_to @time_off_request, alert: "Unable to approve time-off request."
+      respond_to do |format|
+        format.html { redirect_to @time_off_request, alert: "Unable to approve time-off request." }
+        format.json { render json: { error: "Unable to approve request" }, status: :unprocessable_entity }
+      end
     end
   end
 
   def deny
     comment = approval_comment
     if @time_off_request.deny!(reviewer: current_user, comment: comment)
-      redirect_to @time_off_request, notice: "Time-off request denied."
+      respond_to do |format|
+        format.html { redirect_to @time_off_request, notice: "Time-off request denied." }
+        format.json { render json: { time_off_request: @time_off_request, message: "Request denied" } }
+      end
     else
-      redirect_to @time_off_request, alert: "Unable to deny time-off request."
+      respond_to do |format|
+        format.html { redirect_to @time_off_request, alert: "Unable to deny time-off request." }
+        format.json { render json: { error: "Unable to deny request" }, status: :unprocessable_entity }
+      end
     end
   end
 
   def cancel
     comment = approval_comment
     if @time_off_request.cancel!(reviewer: current_user, comment: comment)
-      redirect_to @time_off_request, notice: "Time-off request canceled."
+      respond_to do |format|
+        format.html { redirect_to @time_off_request, notice: "Time-off request canceled." }
+        format.json { render json: { time_off_request: @time_off_request, message: "Request canceled" } }
+      end
     else
-      redirect_to @time_off_request, alert: "Unable to cancel time-off request."
+      respond_to do |format|
+        format.html { redirect_to @time_off_request, alert: "Unable to cancel time-off request." }
+        format.json { render json: { error: "Unable to cancel request" }, status: :unprocessable_entity }
+      end
     end
   end
 
